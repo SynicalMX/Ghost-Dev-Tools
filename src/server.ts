@@ -1,10 +1,14 @@
 import * as ws from 'ws';
+import * as http from 'http';
 import GDTSocket from './socket';
-const server = new ws.Server({ port: 3000 });
+
+const server = new http.Server()
+const wss = new ws.WebSocketServer({ server });
 
 const sockets = []
 
-server.on('connection', (socket: GDTSocket) => {
+console.log("Server is running on *:3000")
+wss.on('connection', (socket: GDTSocket) => {
 	sockets.push(socket)
     socket.on('message', (data, isBinary) => {
 		const message = isBinary ? data : data.toString();
@@ -20,3 +24,5 @@ server.on('connection', (socket: GDTSocket) => {
 		}
 	});
 });
+
+server.listen(3000)

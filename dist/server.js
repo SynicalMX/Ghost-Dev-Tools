@@ -1,7 +1,10 @@
 import * as ws from 'ws';
-const server = new ws.Server({ port: 3000 });
+import * as http from 'http';
+const server = new http.Server();
+const wss = new ws.WebSocketServer({ server });
 const sockets = [];
-server.on('connection', (socket) => {
+console.log("Server is running on *:3000");
+wss.on('connection', (socket) => {
     sockets.push(socket);
     socket.on('message', (data, isBinary) => {
         const message = isBinary ? data : data.toString();
@@ -17,3 +20,4 @@ server.on('connection', (socket) => {
         }
     });
 });
+server.listen(3000);
