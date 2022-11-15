@@ -1,10 +1,10 @@
 {
-	"compileOnSave": "true",
+	"compileOnSave": true,
 	"compilerOptions": {
 		"target": "ES6",
 		"module": "system",
 		"rootDir": "src/",
 		"outFile": "build/ghost-dev-tools.js",
-		"moduleResolution": "classic"
+		"moduleResolution": "Node"
 	}
 }
