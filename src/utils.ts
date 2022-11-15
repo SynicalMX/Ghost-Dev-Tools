@@ -10,14 +10,11 @@ export function makeID(length: number) {
 }
 
 export function makeTemplate(method, ...args) {
-    let template = {
+    const template = {
         method: method,
-        params: [
-
-        ]
+        params: {
+            ...args,
+        }
     }
-    args.forEach((arg: any) => {
-        template.params 
-    })
     return template
 }
