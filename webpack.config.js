@@ -4,6 +4,25 @@
 const webpack = require('webpack');
 const path = require('path');
 
+class AssetToBookmarkletPlugin {
+  pluginName = 'AssetToBookmarkletPlugin';
+  apply(compiler) {
+      compiler.hooks.thisCompilation.tap(this.pluginName, (compilation) => {
+          compilation.hooks.processAssets.tap({
+              name: this.pluginName,
+              stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
+          }, (assets) => {
+              // Emit a new .bookmarklet
+              for (const assetName in assets) {
+                  const asset = assets[assetName];
+                  const content = 'javascript:' + encodeURIComponent('(function(){' + asset.source() + '})()');
+                  compilation.emitAsset(assetName.slice(assetName.indexOf()), new webpack.sources.RawSource(content))
+              }
+          });
+      });
+  }
+}
+
 const config = {
   entry: './src/main.ts',
   mode: 'production',
@@ -26,7 +45,10 @@ const config = {
       '.ts',
       '.js'
     ]
-  }
+  },
+  plugins: [
+      new AssetToBookmarkletPlugin()
+  ]
 };
 
 module.exports = config;
